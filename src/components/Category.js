@@ -1,7 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
 import './styles/Category.css'
-import axios from 'axios'
 
 function Category({ id, categoryName, savedFiles, renameFunc, deleteFunc, updateChecklist }) {
 

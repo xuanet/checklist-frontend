@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import './styles/PublicEditor.css'
 
 export default function PublicChecklistView() {
   const { id } = useParams();
@@ -76,6 +77,22 @@ export default function PublicChecklistView() {
     }
   };
 
+  const removeFile = (catId, index) => {
+    setCategories(prev =>
+      prev.map(cat => {
+        if (cat.id === catId) {
+          const updated = [...cat.addedFiles];
+          updated.splice(index, 1);
+          return { ...cat, addedFiles: updated };
+        }
+        return cat;
+      })
+    );
+  };
+  
+
+  
+
   const saveNewFiles = async () => {
     const formData = new FormData();
     formData.append('checklistId', id);
@@ -90,7 +107,7 @@ export default function PublicChecklistView() {
       await axios.post('http://localhost:5000/append_files', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      alert('New files saved!');
+      alert(`Checklist id ${id} updated`);
     } catch (err) {
       console.error('Error saving files:', err);
       alert('Failed to save new files');
@@ -98,14 +115,15 @@ export default function PublicChecklistView() {
   };
 
   return (
-    <div className="public-checklist">
-      <h2>Checklist #{id}</h2>
+    <div className="public_checklist">
+      <h1 className="header">Checklist id:{id}</h1>
+      <div className="category_list">
       {categories.map((cat) => (
-        <div key={cat.id} className="category-block">
-          <h3>{cat.name}</h3>
-
+        <div key={cat.id} className="category_block">
+          <h3>{`Category: ${cat.name}`}</h3>
+          <p>Existing files:</p>
           <div>
-            <strong>Existing files:</strong>
+            
             <ul>
               {cat.existingFiles.map((f, idx) => (
                 <li key={idx}>
@@ -116,21 +134,29 @@ export default function PublicChecklistView() {
               ))}
             </ul>
           </div>
-
+          <p>Upload new files:</p>
           <div>
-            <input type="file" multiple onChange={(e) => handleFileChange(e, cat.id)} />
+            
+            <input type="file" multiple accept=".txt,.xlsx,.pdf" onChange={(e) => handleFileChange(e, cat.id)} />
             <ul>
               {cat.addedFiles.map((f, idx) => (
                 <li key={idx}>
                   {f.displayName}{' '}
-                  <button onClick={() => renameFile(cat.id, idx)}>Rename</button>
+                  <div className="edit_file" >
+                    <button onClick={() => renameFile(cat.id, idx)}>Rename</button>
+                    <button onClick={() => removeFile(cat.id, idx)}>Remove</button>
+                  </div>
+
                 </li>
               ))}
             </ul>
           </div>
+          
         </div>
       ))}
-      <button onClick={saveNewFiles}>Submit New Files</button>
+            <button className="submit_button" onClick={saveNewFiles}>Submit New Files</button>
+      </div>
+
     </div>
   );
 }
