@@ -4,20 +4,17 @@ import './styles/Category.css'
 function Category({ id, categoryName, savedFiles, renameFunc, deleteFunc, updateChecklist }) {
 
   
-    // updates files
+    // Updates files
     const handleFileUpload = (e) => {
       const selectedFiles = Array.from(e.target.files);
   
-      // creates URL for files for display / download
+      // Creates URL for files for display / download
       const withPreviewUrls = selectedFiles.map(file => ({
         file,
         previewUrl: URL.createObjectURL(file)
       }));
-  
-      // setFiles(prev => [...prev, ...withPreviewUrls]);
       const updatedFiles = [...savedFiles, ...withPreviewUrls]
       updateChecklist(id, updatedFiles)
-
     };
   
     // delete specific file
@@ -34,6 +31,7 @@ function Category({ id, categoryName, savedFiles, renameFunc, deleteFunc, update
 
 
     const renameFile = (index) => {
+
       const newFileName = window.prompt("Enter new file name")
       if (newFileName.length === 0) {
         alert("File name must be non-empty")
@@ -51,8 +49,7 @@ function Category({ id, categoryName, savedFiles, renameFunc, deleteFunc, update
 
   return (
     <div className='category_wrapper'>
-        <button onClick={() => deleteFunc(id)}>Delete</button>
-        <button onClick={() => renameFunc(id)}>Rename</button>
+
         <p className='display'>{categoryName}</p>
         <input
         type="file"
@@ -69,18 +66,19 @@ function Category({ id, categoryName, savedFiles, renameFunc, deleteFunc, update
             <a href={item.previewUrl} target="_blank" rel="noopener noreferrer">
               {item.file.name}
             </a>
-            <button onClick={() => handleDelete(index)} style={{ marginLeft: '10px' }}>
-              Delete
-            </button>
-            <button onClick={() => renameFile(index)} style={{ marginLeft: '10px' }}>
-              Rename
-            </button>
+            <div className="edit_file">
+              <button onClick={() => handleDelete(index)}>Delete</button>
+              <button onClick={() => renameFile(index)}>Rename</button>
+
+            </div>
           </li>
+          
         ))}
       </ul>
 
       {/* <button onClick={saveFiles} disabled={files.length === 0}>Save</button> */}
-        
+      <button onClick={() => deleteFunc(id)}>Delete Category</button>
+      <button onClick={() => renameFunc(id)}>Rename Category</button>
     </div>
   )
 }

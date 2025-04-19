@@ -4,11 +4,19 @@
     padding: 5%
   }
   
-  .clone_checklist {
-    margin: 2%
-  }
+.clone_checklist {
+margin: 2%
+}
+
+.save_checklist {
+margin: 2%
+}
   
-  .save_checklist {
+.rename_category {
+    padding: 2%;
     margin: 2%
-  }
-  
+}
+
+.checklist_id_display {
+    font-size: 5vw;
+}
