@@ -51,9 +51,6 @@ function Category({ id, categoryName, savedFiles, renameFunc, deleteFunc, update
 
     }
 
-  
-
-
   return (
     <div className='category_wrapper'>
         <button onClick={() => deleteFunc(id)}>Delete</button>

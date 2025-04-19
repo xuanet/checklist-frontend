@@ -1,0 +1,14 @@
+.App {
+    display: grid;
+    justify-items: center; /* Centers horizontally */
+    padding: 5%
+  }
+  
+  .clone_checklist {
+    margin: 2%
+  }
+  
+  .save_checklist {
+    margin: 2%
+  }
+  
