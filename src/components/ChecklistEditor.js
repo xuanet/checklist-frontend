@@ -83,9 +83,14 @@ function ChecklistEditor() {
 
     if (isNew) {
       // A new checklist requires the next unused checklistId
-      const response = await axios.get("http://localhost:5000/get_next_available_id")
-      idToUse = response.data
-      setChecklistId(idToUse)
+      try {
+        const response = await axios.get("http://localhost:5000/get_next_available_id")
+        idToUse = response.data
+        setChecklistId(idToUse)
+      } catch (err) {
+        alert('Server offline')
+        return
+      }
     }
   
     const formData = new FormData()
@@ -112,7 +117,7 @@ function ChecklistEditor() {
       }
 
     } catch (err) {
-      alert('Upload failed');
+      alert('Server offline');
     }
   };
 
@@ -158,8 +163,15 @@ const extractChecklist = async() => {
   /*
   Checks whether the desired checklist_id to be cloned exists before sending request
   */
-  const response = await axios.get(`http://localhost:5000/get_all_checklists`)
-  const validData = response.data
+  let validData
+  try {
+    const response = await axios.get(`http://localhost:5000/get_all_checklists`)
+    validData = response.data
+  }
+  catch {
+    alert('Server offline')
+    return
+  }
   const id = prompt(`Enter checklist Id to load. Available ids: ${validData}:`)
   if (validData.includes(parseInt(id))) {
     loadChecklist(parseInt(id))}
@@ -176,7 +188,7 @@ const extractChecklist = async() => {
       ))}
       <input className="rename_category" type="text" value={newCatName} placeholder="Enter new category name" onChange={handleNewCat}></input>
       <button className='add_category' onClick={addCategory}>Add category</button>
-      <button className='save_new_checklist' onClick={() => saveChecklist(true)}>Save new checklist</button>
+      <button className='save_new_checklist' onClick={() => saveChecklist(true)}>Save as new checklist</button>
       <button className='update_existing_checklist' onClick={() => saveChecklist(false)}>Update existing checklist</button>
       <button className='clone_checklist' onClick={extractChecklist}>Load checklist</button>
     </div>
