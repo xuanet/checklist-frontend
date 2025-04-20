@@ -121,7 +121,7 @@ export default function PublicChecklistView() {
 
   return (
     <div className="public_checklist">
-      <h1 className="header">Checklist id: {id}</h1>
+      <h1 className="header">Checklist Id: {id}</h1>
       <div className="category_list">
 
       {categories.map((cat) => (
